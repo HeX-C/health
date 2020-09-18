@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace: 名称空间，接口的全限定名-->
+<mapper namespace="com.itheima.health.dao.CheckGroupDao">
+    <!--查询所有检查组-->
+    <select id="findAll" resultType="CheckItem">
+        select * from t_checkitem
+    </select>
+
+    <!--新增检查组-->
+    <insert id="add" parameterType="CheckGroup">
+#         获取新增组的id
+        <selectKey resultType="int" order="AFTER" keyProperty="id">
+            select last_insert_id();
+        </selectKey>
+        insert into t_checkgroup(code,name,helpCode,sex,remark,attention)
+        values (#{code},#{name},#{helpCode},#{sex},#{remark},#{attention})
+    </insert>
+
+    <!--新增检查组和检查项的关系-->
+    <insert id="addCheckGroupCheckItem">
+        insert into t_checkgroup_checkitem(checkgroup_id,checkitem_id)
+                values (#{checkgroupId},#{checkitemId})
+    </insert>
+
+    <!--添加分页查询检查项-->
+    <select id="findByCondition" parameterType="String" resultType="CheckGroup">
+        select * from t_checkgroup
+            <if test="value != null and value.length > 0">
+                where code like #{value} or name like #{value} or helpCode like #{value}
+            </if>
+    </select>
+
+    <!--编辑检查组时根据id回显数据-->
+    <select id="findById" resultType="CheckGroup">
+        select * from t_checkgroup where id = #{checkGroupId}
+    </select>
+
+    <!--编辑检查组时根据id获取检查项-->
+    <select id="findCheckItemIdsByCheckGroupId" resultType="int">
+        select checkitem_id from t_checkgroup_checkitem where checkgroup_id = #{checkGroupId}
+    </select>
+
+    <!--编辑检查组时更新数据-->
+    <update id="update" parameterType="CheckGroup">
+        update t_checkgroup set
+            code = #{code},
+            name = #{name},
+            helpCode = #{helpCode},
+            sex = #{sex},
+            remark = #{remark},
+            attention = #{attention}
+        where id=#{id}
+    </update>
+
+    <!--删除旧检查组（编辑检查组与检查项的关系）-->
+    <delete id="deleteCheckGroupCheckItem">
+        delete from t_checkgroup_checkitem where checkgroup_id = #{checkGroupId}
+    </delete>
+
+</mapper>
