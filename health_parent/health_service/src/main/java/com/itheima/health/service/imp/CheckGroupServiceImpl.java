@@ -3,9 +3,11 @@ package com.itheima.health.service.imp;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.itheima.health.constant.MessageConstant;
 import com.itheima.health.dao.CheckGroupDao;
 import com.itheima.health.entity.PageResult;
 import com.itheima.health.entity.QueryPageBean;
+import com.itheima.health.exception.HealthException;
 import com.itheima.health.pojo.CheckGroup;
 import com.itheima.health.pojo.CheckItem;
 import com.itheima.health.service.CheckGroupService;
@@ -45,14 +47,14 @@ public class CheckGroupServiceImpl implements CheckGroupService {
         checkGroupDao.add(checkGroup);
 
 //        获取检查组的id
-        Integer checkgroupId = checkGroup.getId();
+        Integer checkGroupId = checkGroup.getId();
 
 //         遍历检查项id, 添加检查组与检查项的关系
         if (null !=checkitemIds ){
             for (Integer checkitemId : checkitemIds) {
 
 //                添加检查组和检查项的关系
-                checkGroupDao.addCheckGroupCheckItem(checkgroupId,checkitemId);
+                checkGroupDao.addCheckGroupCheckItem(checkGroupId,checkitemId);
             }
         }
     }
@@ -119,7 +121,32 @@ public class CheckGroupServiceImpl implements CheckGroupService {
         }
     }
 
+    /*
+    * 删除检查组
+    * */
+    @Override
+    @Transactional
+    public void deleteById(Integer checkGroupId) {
+//        检查 这个检查组是否被套餐使用了
+       int cnt =  checkGroupDao.findSetmealCountByCheckGroup(checkGroupId);
+       if (cnt > 0){
+           throw new HealthException(MessageConstant.DELETE_CHECKGROUP_FAIL);
+       }
+//       没有被使用才可以删除数据
+//        先删除旧关系
+        checkGroupDao.deleteCheckGroupCheckItem(checkGroupId);
 
+//        删除检查组
+        checkGroupDao.deleteById(checkGroupId);
+    }
+
+    /*
+    * 查询套餐时包含的所有检查组
+    * */
+    @Override
+    public List<CheckGroup> findAllCheckgroup() {
+        return checkGroupDao.findAllCheckgroup();
+    }
 
 
 }

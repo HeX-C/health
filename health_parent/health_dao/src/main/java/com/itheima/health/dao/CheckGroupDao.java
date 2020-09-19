@@ -24,7 +24,7 @@ public interface CheckGroupDao {
     /*
     * 新增检查组（添加检查组与检查项的关系）
     * */
-    void addCheckGroupCheckItem(@Param("checkgroupId") Integer checkgroupId,@Param("checkitemId") Integer checkitemId);
+    void addCheckGroupCheckItem(@Param("checkGroupId") Integer checkGroupId,@Param("checkitemId") Integer checkitemId);
     /*
     * 根据条件分页查询检查组
     * */
@@ -45,4 +45,16 @@ public interface CheckGroupDao {
     * 删除旧检查组（编辑检查组与检查项的关系）
     * */
     void deleteCheckGroupCheckItem(Integer checkGroupId);
+    /*
+    * 删除检查组
+    * */
+    void deleteById(Integer checkGroupId);
+    /*
+    * 判断检查组是否在套餐内存在
+    * */
+    int findSetmealCountByCheckGroup(Integer checkGroupId);
+    /*
+    * 展示套餐包含的所有检查组
+    * */
+    List<CheckGroup> findAllCheckgroup();
 }

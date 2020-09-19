@@ -37,4 +37,12 @@ public interface CheckGroupService {
     * 编辑检查组时更新数据
     * */
     void update(CheckGroup checkGroup,Integer[] checkitemIds);
+    /*
+    * 删除检查组
+    * */
+    void deleteById(Integer id);
+    /*
+    *展示套餐包含的所有检查组
+    * */
+    List<CheckGroup> findAllCheckgroup();
 }

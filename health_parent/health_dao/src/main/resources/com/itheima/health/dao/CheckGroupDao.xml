@@ -5,7 +5,7 @@
 
 <!--namespace: 名称空间，接口的全限定名-->
 <mapper namespace="com.itheima.health.dao.CheckGroupDao">
-    <!--查询所有检查组-->
+    <!--查询检查组包含的所有检查项-->
     <select id="findAll" resultType="CheckItem">
         select * from t_checkitem
     </select>
@@ -23,7 +23,7 @@
     <!--新增检查组和检查项的关系-->
     <insert id="addCheckGroupCheckItem">
         insert into t_checkgroup_checkitem(checkgroup_id,checkitem_id)
-                values (#{checkgroupId},#{checkitemId})
+                values (#{checkGroupId},#{checkitemId})
     </insert>
 
     <!--添加分页查询检查项-->
@@ -56,9 +56,24 @@
         where id=#{id}
     </update>
 
+    <!--判断检查是否在套餐在存在-->
+    <select id="findSetmealCountByCheckGroup" resultType="int">
+        select count(1) from t_setmeal_checkgroup  where checkgroup_id = #{checkGroupId}
+    </select>
     <!--删除旧检查组（编辑检查组与检查项的关系）-->
     <delete id="deleteCheckGroupCheckItem">
         delete from t_checkgroup_checkitem where checkgroup_id = #{checkGroupId}
     </delete>
+
+    <!--删除检查组-->
+    <delete id="deleteById" >
+        delete from t_checkgroup where id = #{checkGroupId}
+    </delete>
+
+    <!--查询套餐包含的所有检查组-->
+    <select id="findAllCheckgroup" resultType="CheckGroup">
+        select * from t_checkgroup
+    </select>
+
 
 </mapper>

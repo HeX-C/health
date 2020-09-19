@@ -9,11 +9,13 @@ import com.itheima.health.pojo.CheckItem;
 import com.itheima.health.service.CheckItemService;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/checkitem")
 public class CheckItemController {
+
 
 //    引入服务
     @Reference
