@@ -9,10 +9,11 @@ import com.itheima.health.entity.QueryPageBean;
 import com.itheima.health.entity.Result;
 import com.itheima.health.pojo.Setmeal;
 import com.itheima.health.service.SetmealService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
@@ -28,6 +29,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/setmeal")
 public class SetmealController {
+
+    private  static Logger logger = LoggerFactory.getLogger(SetmealController.class);
 
     @Reference
     private SetmealService setmealService;
@@ -71,9 +74,9 @@ public class SetmealController {
 
             return new Result(true,MessageConstant.PIC_UPLOAD_SUCCESS,map);
         } catch (IOException e) {
-            e.printStackTrace();
+           logger.error("上传图片失败",e);
         }
-            return new Result(true,MessageConstant.PIC_UPLOAD_FAIL);
+            return new Result(false,MessageConstant.PIC_UPLOAD_FAIL);
     }
 
     /*

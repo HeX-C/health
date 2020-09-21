@@ -2,6 +2,7 @@ package com.itheima.health.dao;
 
 
 import com.github.pagehelper.Page;
+import com.itheima.health.exception.HealthException;
 import com.itheima.health.pojo.CheckGroup;
 import com.itheima.health.pojo.CheckItem;
 import org.apache.ibatis.annotations.Param;
@@ -48,7 +49,7 @@ public interface CheckGroupDao {
     /*
     * 删除检查组
     * */
-    void deleteById(Integer checkGroupId);
+    void deleteById(Integer checkGroupId) throws HealthException;
     /*
     * 判断检查组是否在套餐内存在
     * */
@@ -57,4 +58,5 @@ public interface CheckGroupDao {
     * 展示套餐包含的所有检查组
     * */
     List<CheckGroup> findAllCheckgroup();
+
 }

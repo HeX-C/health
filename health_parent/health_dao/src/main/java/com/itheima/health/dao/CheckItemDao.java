@@ -3,6 +3,7 @@ package com.itheima.health.dao;
 import com.github.pagehelper.Page;
 import com.itheima.health.entity.PageResult;
 import com.itheima.health.entity.QueryPageBean;
+import com.itheima.health.exception.HealthException;
 import com.itheima.health.pojo.CheckItem;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public interface CheckItemDao {
     /*
     * 根据id删除检查项
     * */
-    void deleteById(Integer id);
+    void deleteById(Integer id) throws HealthException;
     /*
     * 根据检查项id查询检查项是否存在于检查组
     * */

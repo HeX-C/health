@@ -1,6 +1,7 @@
 package com.itheima.health.dao;
 
 import com.github.pagehelper.Page;
+import com.itheima.health.exception.HealthException;
 import com.itheima.health.pojo.Setmeal;
 import org.apache.ibatis.annotations.Param;
 
@@ -43,7 +44,7 @@ public interface SetmealDao {
     /*
     * 删除套餐
     * */
-    void deleteById(Integer id);
+    void deleteById(Integer id) throws HealthException;
     /*
     * 判断使用有订单在使用此套餐
     * */
