@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--注册任务-->
+    <bean id="myjob" class="com.itheima.job.JobDemo"/>
+
+    <!--任务策略-->
+    <bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!--targetObject 要调用的 bean对象，任务类对象-->
+        <property name="targetObject" ref="myjob"/>
+
+        <!--要调用任务类中的方法-->
+        <property name="targetMethod" value="Job"/>
+
+        <!--并发执行-->
+        <property name="concurrent" value="true"/>
+    </bean>
+
+    <!--触发器-->
+    <bean id="trigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <!--  从0秒开始，每间隔2秒触发一次
+        七子表达式 空格隔开
+        秒 分 时 日 月 周 年（省略，每年） -->
+        <property name="cronExpression" value="0/2 * * * * ?"/>
+
+        <!--触发时使用的策略-->
+        <property name="jobDetail" ref="jobDetail"/>
+    </bean>
+
+    <!--调度容器 注册一个统一的调度工厂-->
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers" >
+            <list>
+                <ref bean="trigger" />
+            </list>
+        </property>
+    </bean>
+</beans>
